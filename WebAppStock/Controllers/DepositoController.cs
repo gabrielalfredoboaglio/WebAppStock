@@ -7,10 +7,10 @@ namespace WebAppStock.Controllers
     {
         public IActionResult Index()
         {
-
-           DepositoService depositoService = new DepositoService();
-            var deposito = depositoService.ObtenerDepositoPorId(26);
-            return View(deposito);
+            DepositoService depositoService = new DepositoService();
+            var depositos = depositoService.ObtenerTodosLosDepositos();
+            return View(depositos);
         }
     }
 }
+

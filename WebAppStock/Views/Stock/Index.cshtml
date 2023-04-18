@@ -1,6 +1,37 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<CodigoComun.Models.Stock>
+
+
+
+
+
+<h2>Lista de stocks</h2>
+@if (Model != null && Model.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <td>IdStock</td>
+                <th>IdArtículo</th>
+                <th>IdDepósito</th>
+                <th>Cantidad</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stock in Model)
+            {
+                <tr>
+                    <td>@stock.Id</td>
+                    <td>@stock.IdArticulo</td>
+                    <td>@stock.IdDeposito</td>
+                    <td>@stock.Cantidad</td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-<h1>Esto es index de Stock</h1>
+else
+{
+    <p>No se encontraron stocks</p>
+}
