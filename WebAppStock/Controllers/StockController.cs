@@ -108,7 +108,7 @@ namespace WebAppStock.Controllers
             return View(stockViewModels);
         }
 
-    
+
         [HttpPost]
         public IActionResult Create(StockViewModels stockViewModels)
         {
@@ -158,10 +158,39 @@ namespace WebAppStock.Controllers
                 return View(stockViewModels);
             }
         }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var stock = _stockService.ObtenerStockPorId(id);
 
+                if (stock == null)
+                {
+                    return NotFound();
+                }
 
-
-
+                var resultado = _stockService.EliminarStock(id).ToString();
+                if (resultado.Equals("Stock eliminado correctamente"))
+                {
+                    return RedirectToAction("Index");
+                }
+                else if (resultado.Equals("0"))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest("Error al eliminar el stock");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-}
+    }
+
+
 

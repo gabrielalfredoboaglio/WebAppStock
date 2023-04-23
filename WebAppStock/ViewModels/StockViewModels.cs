@@ -24,6 +24,9 @@ namespace WebAppStock.ViewModels
             get { return _stockDTOs; }
             set { _stockDTOs = new List<StockDTO>(value); }
         }
+
+        public object Id { get; internal set; }
+
         private List<StockDTO> _stockDTOs;
 
         public IEnumerator<StockDTO> GetEnumerator()
