@@ -57,7 +57,8 @@ namespace WebAppStock.Controllers
                 var articuloDTO = new ArticuloDTO
                 {
                     Id = articulo.Id,
-                    Nombre = articulo.Nombre
+                    Nombre = articulo.Nombre,
+                    Codigo = articulo.Codigo
                 };
                 articuloDTOs.Add(articuloDTO);
             }
