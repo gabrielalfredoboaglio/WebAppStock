@@ -1,19 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-using CodigoComun.Models;
-using CodigoComun.Repository;
+﻿using CodigoComun.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebAppStock.Controllers
 {
     public class StockController : Controller
     {
-        public IActionResult Index()
+        private readonly StockService _stockService;
+
+        public StockController()
         {
-            StockRepository stockRepository = new StockRepository();
-            StockService stockServices = new StockService(stockRepository);
-            List<Stock> stocksDeLaBaseDeDatos = stockServices.ObtenerTodosLosStocks();
-            return View(stocksDeLaBaseDeDatos);
+            var stockRepository = new StockRepository();
+            _stockService = new StockService(stockRepository);
         }
 
+        public IActionResult Index()
+        {
+            var stocks = _stockService.ObtenerTodosLosStocks();
+            return View(stocks);
+        }
     }
 }
+

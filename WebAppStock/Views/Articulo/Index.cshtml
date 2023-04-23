@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<CodigoComun.Modelos.Articulo>
-
+@using CodigoComun.Negocio
+<h2>Lista de Articulos</h2>
+<br />
+<a asp-action="Create" class="btn btn-primary">Crear</a>
 @if (Model != null && Model.Any())
 {
-    <h2>Lista de Articulos</h2>
-    <br />
     <table>
         <thead>
             <tr>
@@ -14,6 +15,7 @@
                 <th>Proveedor</th>
                 <th>Precio</th>
                 <th>Codigo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +29,12 @@
                     <td>@articulo.Proveedor</td>
                     <td>@articulo.Precio</td>
                     <td>@articulo.Codigo</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-articuloId="@articulo.Id" class="btn btn-info">Editar</a>
+
+                        <a asp-action="Delete" asp-route-articuloId="@articulo.Id" class="btn btn-danger">Eliminar</a>
+
+                    </td>
                 </tr>
             }
         </tbody>
@@ -36,3 +44,4 @@ else
 {
     <p>No se encontraron Articulos.</p>
 }
+

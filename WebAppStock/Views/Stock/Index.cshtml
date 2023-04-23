@@ -1,8 +1,4 @@
-﻿@model List<CodigoComun.Models.Stock>
-
-
-
-
+﻿@model IEnumerable<CodigoComun.Models.Stock>
 
 <h2>Lista de stocks</h2>
 @if (Model != null && Model.Any())
@@ -10,22 +6,17 @@
     <table>
         <thead>
             <tr>
-                <td>IdStock</td>
-                <th>IdArtículo</th>
-                <th>IdDepósito</th>
-                <th>Cantidad</th>
-                
+                <th>Nombre de deposito</th>
+               
             </tr>
         </thead>
         <tbody>
             @foreach (var stock in Model)
             {
                 <tr>
-                    <td>@stock.Id</td>
-                    <td>@stock.IdArticulo</td>
-                    <td>@stock.IdDeposito</td>
-                    <td>@stock.Cantidad</td>
                     
+                    <td>@stock.IdDepositoNavigation.Nombre</td>
+                 
                 </tr>
             }
         </tbody>
