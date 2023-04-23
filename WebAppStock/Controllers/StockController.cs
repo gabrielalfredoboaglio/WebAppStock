@@ -1,4 +1,5 @@
-﻿using CodigoComun.Modelos.DTO;
+﻿using CodigoComun.Modelos;
+using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
 using CodigoComun.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,74 @@ namespace WebAppStock.Controllers
 
         public IActionResult Index()
         {
-            var stock = _stockService.ObtenerTodosLosStocks();
-            return View(stock);
+            var stockRepository = new StockRepository();
+            var stockService = new StockService(stockRepository);
+            var stocks = stockService.ObtenerTodosLosStocks();
+
+            // Crear una lista vacía de StockDTO
+            var stockDTOs = new List<StockDTO>();
+
+            // Convertir cada objeto Stock en un objeto StockDTO
+            foreach (var stock in stocks)
+            {
+                var stockDTO = new StockDTO
+                {
+                    Id = stock.Id,
+                    IdArticulo = stock.IdArticulo,
+                    IdDeposito = stock.IdDeposito,
+                    Cantidad = stock.Cantidad
+                };
+                stockDTOs.Add(stockDTO);
+            }
+
+            var stockViewModels = new StockViewModels();
+
+            // Obtener la lista de artículos y depósitos
+            var articuloService = new ArticuloService();
+            var depositoService = new DepositoService();
+            var articulos = articuloService.ObtenerTodosLosArticulos();
+            var depositos = depositoService.ObtenerTodosLosDepositos();
+
+            // Convertir la lista de artículos y depósitos en una lista de ArticuloDTO y DepositoDTO
+            var articuloDTOs = new List<ArticuloDTO>();
+            var depositoDTOs = new List<DepositoDTO>();
+
+            foreach (var articulo in articulos)
+            {
+                var articuloDTO = new ArticuloDTO
+                {
+                    Id = articulo.Id,
+                    Nombre = articulo.Nombre
+                };
+                articuloDTOs.Add(articuloDTO);
+            }
+
+            foreach (var deposito in depositos)
+            {
+                var depositoDTO = new DepositoDTO
+                {
+                    Id = deposito.Id,
+                    Nombre = deposito.Nombre
+                };
+                depositoDTOs.Add(depositoDTO);
+            }
+
+            // Asignar la lista de ArticuloDTOs y DepositoDTOs a las propiedades del modelo
+            stockViewModels.ArticulosList = articuloDTOs;
+            stockViewModels.DepositosList = depositoDTOs;
+
+            // Asignar la lista de StockDTOs a la propiedad StockDTOs
+            stockViewModels.StockDTOs = stockDTOs;
+
+            return View(stockViewModels);
         }
 
 
 
-    
+
+
+
+
 
         [HttpGet]
         public IActionResult Create()
