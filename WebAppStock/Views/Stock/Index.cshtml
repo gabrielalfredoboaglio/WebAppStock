@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CodigoComun.Models.Stock>
+﻿@*
+@model IEnumerable<CodigoComun.Models.Stock>
 
 <h2>Lista de stocks</h2>
 @if (Model != null && Model.Any())
@@ -14,8 +15,8 @@
             @foreach (var stock in Model)
             {
                 <tr>
-                    
-                    <td>@stock.IdDepositoNavigation.Nombre</td>
+
+                    <td>@CodigoComun.Modelos.DTO.StockDTO.</td>
                  
                 </tr>
             }
@@ -26,3 +27,4 @@ else
 {
     <p>No se encontraron stocks</p>
 }
+*@
