@@ -7,7 +7,7 @@
     <div class="col-md-4">
         <form asp-action="Edit" method="post">
             
-
+            
             <div class="form-group">
                 <label for="SelectedArticulo" class="control-label">Lista de articulos</label>
                 @Html.DropDownListFor(model => model.SelectedArticulo, Model.selectArticulosList, "Seleccione un artículo", new { @class = "form-control" })

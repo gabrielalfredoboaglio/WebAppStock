@@ -209,6 +209,7 @@ namespace WebAppStock.Controllers
             var depositos = depositoService.ObtenerTodosLosDepositos();
 
             // Convertir la lista de artículos y depósitos en una lista de SelectListItems
+          
             stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
             stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
 
@@ -227,6 +228,7 @@ namespace WebAppStock.Controllers
 
             if (stockViewModels.StockDTO != null)
             {
+                
                 stockViewModels.StockDTO.IdArticulo = stockViewModels.SelectedArticulo;
                 stockViewModels.StockDTO.IdDeposito = stockViewModels.SelectedDeposito;
                 stockViewModels.StockDTO.Cantidad = stockViewModels.Cantidad; // Asignar la cantidad ingresada
@@ -258,7 +260,7 @@ namespace WebAppStock.Controllers
                 var depositoService = new DepositoService();
                 var articulos = articuloService.ObtenerTodosLosArticulos();
                 var depositos = depositoService.ObtenerTodosLosDepositos();
-
+               
                 stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
                 stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
 
