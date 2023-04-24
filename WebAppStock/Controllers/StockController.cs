@@ -1,5 +1,6 @@
 ﻿using CodigoComun.Modelos;
 using CodigoComun.Modelos.DTO;
+using CodigoComun.Models;
 using CodigoComun.Negocio;
 using CodigoComun.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,12 @@ namespace WebAppStock.Controllers
 {
     public class StockController : Controller
     {
-        private readonly StockService _stockService;
+        private readonly StockService _stockRepository;
 
         public StockController()
         {
             var stockRepository = new StockRepository();
-            _stockService = new StockService(stockRepository);
+            _stockRepository = new StockService(stockRepository);
         }
 
         public IActionResult Index()
@@ -163,14 +164,14 @@ namespace WebAppStock.Controllers
         {
             try
             {
-                var stock = _stockService.ObtenerStockPorId(id);
+                var stock = _stockRepository.ObtenerStockPorId(id);
 
                 if (stock == null)
                 {
                     return NotFound();
                 }
 
-                var resultado = _stockService.EliminarStock(id).ToString();
+                var resultado = _stockRepository.EliminarStock(id).ToString();
                 if (resultado.Equals("Stock eliminado correctamente"))
                 {
                     return RedirectToAction("Index");
@@ -189,8 +190,87 @@ namespace WebAppStock.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+
+
+
+
+
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            var stockViewModels = new StockViewModels();
+
+            // Obtener la lista de artículos y depósitos
+            var articuloService = new ArticuloService();
+            var depositoService = new DepositoService();
+            var articulos = articuloService.ObtenerTodosLosArticulos();
+            var depositos = depositoService.ObtenerTodosLosDepositos();
+
+            // Convertir la lista de artículos y depósitos en una lista de SelectListItems
+            stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
+            stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
+
+            return View(stockViewModels);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(StockViewModels stockViewModels)
+        {
+            var stockRepository = new StockRepository();
+            var stockService = new StockService(stockRepository);
+
+            // Inicializar el objeto StockDTO
+            stockViewModels.StockDTO = new StockDTO();
+
+            if (stockViewModels.StockDTO != null)
+            {
+                stockViewModels.StockDTO.IdArticulo = stockViewModels.SelectedArticulo;
+                stockViewModels.StockDTO.IdDeposito = stockViewModels.SelectedDeposito;
+                stockViewModels.StockDTO.Cantidad = stockViewModels.Cantidad; // Asignar la cantidad ingresada
+
+                stockViewModels.StockDTO = stockService.AgregarStock(stockViewModels.StockDTO);
+
+                // Actualizar el mínimo stock del Articulo
+                var articuloService = new ArticuloService();
+                var articulo = articuloService.GetArticuloPorId((int)stockViewModels.StockDTO.IdArticulo);
+                if (articulo != null) // Verificar que el Articulo exista
+                {
+                    articulo.MinimoStock += stockViewModels.Cantidad; // Sumar la cantidad ingresada al mínimo stock
+                    articuloService.ActualizarArticulo(articulo); // Guardar el Articulo actualizado en la base de datos
+                }
+            }
+
+
+
+
+            if (stockViewModels.StockDTO.HuboError == false)
+            {
+                // hacer algo si no hubo error
+                return RedirectToAction("Index", "Stock");
+            }
+            else
+            {
+                // hacer algo si hubo error
+                var articuloService = new ArticuloService();
+                var depositoService = new DepositoService();
+                var articulos = articuloService.ObtenerTodosLosArticulos();
+                var depositos = depositoService.ObtenerTodosLosDepositos();
+
+                stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
+                stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
+
+                return View(stockViewModels);
+            }
+        }
     }
-    }
+
+}
+
+
+
 
 
 

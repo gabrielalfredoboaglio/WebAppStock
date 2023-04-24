@@ -1,0 +1,37 @@
+﻿@using WebAppStock.ViewModels;
+
+
+@model StockViewModels
+<h2>Editar Stock</h2>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            
+
+            <div class="form-group">
+                <label for="SelectedArticulo" class="control-label">Lista de articulos</label>
+                @Html.DropDownListFor(model => model.SelectedArticulo, Model.selectArticulosList, "Seleccione un artículo", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="SelectedDeposito" class="control-label">Lista de depositos</label>
+                @Html.DropDownListFor(model => model.SelectedDeposito, Model.selectDepositosList, "Seleccione un depósito", new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Cantidad" class="control-label"></label>
+                <input asp-for="Cantidad" class="form-control" />
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Volver</a>
+</div>
+
+
