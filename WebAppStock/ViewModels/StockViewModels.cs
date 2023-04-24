@@ -19,15 +19,18 @@ namespace WebAppStock.ViewModels
         public decimal Cantidad { get; set; } // Nuevo campo para la cantidad
         public StockDTO StockDTO { get; set; }
 
+        private List<StockDTO> _stockDTOs;
+
         public IEnumerable<StockDTO> StockDTOs
         {
             get { return _stockDTOs; }
             set { _stockDTOs = new List<StockDTO>(value); }
         }
 
-        public object Id { get; internal set; }
-
-        private List<StockDTO> _stockDTOs;
+        public StockViewModels()
+        {
+            _stockDTOs = new List<StockDTO>();
+        }
 
         public IEnumerator<StockDTO> GetEnumerator()
         {
