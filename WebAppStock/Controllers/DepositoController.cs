@@ -90,21 +90,33 @@ namespace WebAppStock.Controllers
         [HttpGet]
         public IActionResult Delete(int depositoId)
         {
-            var depositoAEliminar = depositoRepository.ObtenerDepositoPorId(depositoId);
-
-            if (depositoAEliminar == null)
+            try
             {
-                return NotFound();
+                var deposito = depositoRepository.ObtenerDepositoPorId(depositoId);
+
+                if (deposito == null)
+                {
+                    return NotFound();
+                }
+
+                var resultado = depositoRepository.EliminarDeposito(depositoId).ToString();
+                if (resultado.Equals("Depósito eliminado correctamente"))
+                {
+                    return RedirectToAction("Index");
+                }
+                else if (resultado.Equals("0"))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest("Error al eliminar el depósito");
+                }
             }
-
-            var resultado = depositoRepository.EliminarDeposito(depositoId);
-
-            if (resultado != "Deposito eliminado correctamente")
+            catch (Exception ex)
             {
-                return BadRequest(resultado);
+                return BadRequest(ex.Message);
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
 
