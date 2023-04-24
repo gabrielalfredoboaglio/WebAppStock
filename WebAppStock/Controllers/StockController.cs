@@ -160,6 +160,9 @@ namespace WebAppStock.Controllers
                 return View(stockViewModels);
             }
         }
+
+
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -199,9 +202,25 @@ namespace WebAppStock.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
-            var stockViewModels = new StockViewModels();
+            var stockRepository = new StockRepository();
+            var stockService = new StockService(stockRepository);
+
+            var stockDTO = stockService.ObtenerStockPorId(id);
+
+            if (stockDTO == null)
+            {
+                return NotFound();
+            }
+
+            var stockViewModels = new StockViewModels
+            {
+                Id = stockDTO.Id,
+                SelectedArticulo = (int)stockDTO.IdArticulo,
+                SelectedDeposito = (int)stockDTO.IdDeposito,
+                Cantidad = (decimal)stockDTO.Cantidad
+            };
 
             // Obtener la lista de artículos y depósitos
             var articuloService = new ArticuloService();
@@ -210,7 +229,6 @@ namespace WebAppStock.Controllers
             var depositos = depositoService.ObtenerTodosLosDepositos();
 
             // Convertir la lista de artículos y depósitos en una lista de SelectListItems
-          
             stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
             stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
 
@@ -224,49 +242,17 @@ namespace WebAppStock.Controllers
             var stockRepository = new StockRepository();
             var stockService = new StockService(stockRepository);
 
-            // Inicializar el objeto StockDTO
-            stockViewModels.StockDTO = new StockDTO();
+            // Obtener el objeto StockDTO de la base de datos usando su Id
+            var stockDTO = stockService.ObtenerStockPorId(stockViewModels.Id);
 
-            if (stockViewModels.StockDTO != null)
+            if (stockDTO != null)
             {
-                
-                stockViewModels.StockDTO.IdArticulo = stockViewModels.SelectedArticulo;
-                stockViewModels.StockDTO.IdDeposito = stockViewModels.SelectedDeposito;
-                stockViewModels.StockDTO.Cantidad = stockViewModels.Cantidad; // Asignar la cantidad ingresada
-
-                stockViewModels.StockDTO = stockService.AgregarStock(stockViewModels.StockDTO);
-
-                // Actualizar el mínimo stock del Articulo
-                var articuloService = new ArticuloService();
-                var articulo = articuloService.GetArticuloPorId((int)stockViewModels.StockDTO.IdArticulo);
-                if (articulo != null) // Verificar que el Articulo exista
-                {
-                    articulo.MinimoStock += stockViewModels.Cantidad; // Sumar la cantidad ingresada al mínimo stock
-                    articuloService.ActualizarArticulo(articulo); // Guardar el Articulo actualizado en la base de datos
-                }
+                stockDTO.Cantidad = stockViewModels.Cantidad; // Actualizar la cantidad ingresada
+                stockService.ActualizarStock(stockDTO); // Guardar el objeto StockDTO actualizado en la base de datos
             }
 
-
-
-
-            if (stockViewModels.StockDTO.HuboError == false)
-            {
-                // hacer algo si no hubo error
-                return RedirectToAction("Index", "Stock");
-            }
-            else
-            {
-                // hacer algo si hubo error
-                var articuloService = new ArticuloService();
-                var depositoService = new DepositoService();
-                var articulos = articuloService.ObtenerTodosLosArticulos();
-                var depositos = depositoService.ObtenerTodosLosDepositos();
-               
-                stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
-                stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
-
-                return View(stockViewModels);
-            }
+            // Redirigir al Index de Stock
+            return RedirectToAction("Index", "Stock");
         }
     }
 

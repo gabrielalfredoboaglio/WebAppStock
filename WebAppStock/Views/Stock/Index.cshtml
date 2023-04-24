@@ -23,7 +23,7 @@
                     <td>@Model.DepositosList.Where(d => d.Id == stockDTO.IdDeposito).FirstOrDefault()?.Nombre</td>
                     <td>@Model.ArticulosList.FirstOrDefault(a => a.Id == stockDTO.IdArticulo)?.Codigo</td>
 
-                    <td><a asp-action="Edit" asp-route-idStockAModificar="@stockDTO.Id" class="btn btn-info">Editar</a></td>
+                    <td><a asp-action="Edit" asp-route-id="@stockDTO.Id" class="btn btn-info">Editar</a></td>
 
                     
                     <td><a asp-action="Delete" asp-route-id="@stockDTO.Id" class="btn btn-danger">Eliminar</a></td>
@@ -37,7 +37,6 @@ else
 {
     <p>No se encontraron stocks</p>
 }
-
 
 
 

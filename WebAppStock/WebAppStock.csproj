@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <Reference Include="CodigoComun">
-      <HintPath>..\..\Proyectos C#\CodigoComun\ClassLibrary\bin\Debug\net6.0\CodigoComun.dll</HintPath>
+      <HintPath>..\..\CodigoComun\ClassLibrary\bin\Debug\net6.0\CodigoComun.dll</HintPath>
     </Reference>
   </ItemGroup>
 

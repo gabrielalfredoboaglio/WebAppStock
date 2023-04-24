@@ -9,6 +9,7 @@ namespace WebAppStock.ViewModels
 {
     public class StockViewModels : IEnumerable<StockDTO>
     {
+        public int Id { get; set; }
         public List<ArticuloDTO> ArticulosList { get; set; }
         public List<DepositoDTO> DepositosList { get; set; }
 
