@@ -11,7 +11,7 @@ namespace WebAppStock.Controllers
     public class DepositoController : Controller
     {
         private readonly DepositoService depositoRepository = new DepositoService();
-
+        private readonly DepositoService depositoService = new DepositoService();
         public IActionResult Index()
         {
             var depositos = depositoRepository.ObtenerTodosLosDepositos();
@@ -45,68 +45,65 @@ namespace WebAppStock.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int idDepositoAModificar)
+        public IActionResult Edit(int idDepositoAGuardar)
         {
-            Deposito depositoAActualizar = depositoRepository.ObtenerDepositoPorId(idDepositoAModificar);
-            if (depositoAActualizar == null)
+            DepositoDTO deposito = depositoService.ObtenerDepositoPorId(idDepositoAGuardar);
+            if (deposito == null)
             {
                 return NotFound();
             }
-            return View(depositoAActualizar);
+
+            return View(deposito);
         }
 
-        [HttpPost]
-        public IActionResult Edit(Deposito depositoAModificar)
-        {
-            int resultado = depositoRepository.ModificarDeposito(depositoAModificar);
 
-            if (resultado == 1)
+        [HttpPost]
+        public IActionResult Edit(int id, DepositoDTO depositoActualizado)
+        {
+            if (id != depositoActualizado.Id)
             {
-                TempData["Mensaje"] = "Depósito modificado correctamente";
-                return RedirectToAction(nameof(Index));
+                return BadRequest();
+            }
+
+            var resultado = depositoService.ModificarDeposito(depositoActualizado);
+
+            if (resultado != null)
+            {
+                TempData["Mensaje"] = "Depósito Actualizado";
+                return RedirectToAction("Index");
             }
             else
             {
-                ViewBag.Mensaje = "Error al modificar el depósito";
-                return View(depositoAModificar);
+                ViewBag.Mensaje = "No se pudo actualizar el depósito";
+                return View(depositoActualizado);
             }
         }
 
-
         [HttpGet]
-        public IActionResult Delete(int depositoId)
+        public IActionResult Delete(int idDepositoEliminar)
         {
-            try
-            {
-                var deposito = depositoRepository.ObtenerDepositoPorId(depositoId);
+            var depositoAEliminar = depositoService.ObtenerDepositoPorId(idDepositoEliminar);
 
-                if (deposito == null)
-                {
-                    return NotFound();
-                }
-
-                var resultado = depositoRepository.EliminarDeposito(depositoId).ToString();
-                if (resultado.Equals("Depósito eliminado correctamente"))
-                {
-                    return RedirectToAction("Index");
-                }
-                else if (resultado.Equals("0"))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest("Error al eliminar el depósito");
-                }
-            }
-            catch (Exception ex)
+            if (depositoAEliminar == null)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
+
+            var resultado = depositoService.EliminarDeposito(idDepositoEliminar);
+
+            if (resultado.Mensaje != "Depósito eliminado correctamente")
+            {
+                return BadRequest(resultado.Mensaje);
+            }
+
+            TempData["Mensaje"] = resultado.Mensaje;
+
+            return RedirectToAction(nameof(Index));
         }
 
 
     }
 }
+
 
 

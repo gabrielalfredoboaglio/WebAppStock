@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CodigoComun.Models.Deposito>
+﻿@model IEnumerable<CodigoComun.Modelos.DTO.DepositoDTO>
 
 <h2>Lista de depósitos</h2>
 <br />
@@ -24,9 +24,10 @@
                     <td>@deposito.Nombre</td>
                     <td>@deposito.Direccion</td>
                     <td>@deposito.Capacidad</td>
-                    <td><a asp-action="Edit" asp-route-idDepositoAModificar="@deposito.Id" class="btn btn-info">Editar</a></td>
+                    <td><a asp-action="Edit" asp-route-idDepositoAGuardar="@deposito.Id" class="btn btn-info">Editar</a></td>
 
-                    <td><a asp-action="Delete" asp-route-depositoId="@deposito.Id" class="btn btn-danger">Eliminar</a></td>
+
+                    <td><a asp-action="Delete" asp-route-idDepositoEliminar="@deposito.Id" class="btn btn-danger">Eliminar</a></td>
                 </tr>
             }
         </tbody>
