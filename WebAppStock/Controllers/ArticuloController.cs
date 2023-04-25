@@ -39,34 +39,43 @@ namespace WebAppStock.Controllers
                 return View(articuloDTOAguardar);
             }
         }
-        public IActionResult Details()
-        {
-
-            return View();
-        }
         [HttpGet]
         public IActionResult Edit(int articuloId)
         {
-            var articuloAModificar = articuloService.GetArticuloPorId(articuloId);
-            return View(articuloAModificar);
+            ArticuloDTO articulo = articuloService.GetArticuloPorId(articuloId);
+            if (articulo == null)
+            {
+                return NotFound();
+            }
+
+            return View(articulo);
         }
 
-        [HttpPost]
-        public IActionResult Edit(Articulo articuloAActualizar)
-        {
-            string mensaje = articuloService.ActualizarArticulo(articuloAActualizar);
 
-            if (mensaje == "Articulo Actualizado")
+        [HttpPost]
+        public IActionResult Edit(int id, ArticuloDTO articuloActualizado)
+        {
+            if (id != articuloActualizado.Id)
             {
-                TempData["Mensaje"] = mensaje;
+                return BadRequest();
+            }
+
+            var resultado = articuloService.ActualizarArticulo(articuloActualizado);
+
+            if (resultado != null)
+            {
+                TempData["Mensaje"] = "Articulo Actualizado";
                 return RedirectToAction("Index");
             }
             else
             {
-                ViewBag.Mensaje = mensaje;
-                return View(articuloAActualizar);
+                ViewBag.Mensaje = "No se pudo actualizar el articulo";
+                return View(articuloActualizado);
             }
         }
+
+
+
 
         [HttpGet]
         public IActionResult Delete(int articuloId)
@@ -80,13 +89,16 @@ namespace WebAppStock.Controllers
 
             var resultado = articuloService.EliminarArticulo(articuloId);
 
-            if (resultado != "Articulo eliminado correctamente")
+            if (resultado.Mensaje != "Articulo eliminado correctamente")
             {
-                return BadRequest(resultado);
+                return BadRequest(resultado.Mensaje);
             }
+
+            TempData["Mensaje"] = resultado.Mensaje;
 
             return RedirectToAction(nameof(Index));
         }
+
 
 
     }

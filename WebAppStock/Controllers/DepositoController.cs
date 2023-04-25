@@ -44,20 +44,6 @@ namespace WebAppStock.Controllers
 
 
 
-
-
-        public IActionResult Details(int depositoId)
-        {
-            var deposito = depositoRepository.ObtenerDepositoPorId(depositoId);
-
-            if (deposito == null)
-            {
-                return NotFound();
-            }
-
-            return View(deposito);
-        }
-
         [HttpGet]
         public IActionResult Edit(int idDepositoAModificar)
         {
