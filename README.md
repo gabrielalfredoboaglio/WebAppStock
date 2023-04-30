@@ -32,3 +32,4 @@ Para hacer funcionar el programa, es necesario conectarlo a una base de datos en
 4. Actualiza la cadena de conexión con la información de tu base de datos en la nube.
 5. Una vez que hayas actualizado la cadena de conexión, podrás conectarte a tu base de datos en la nube.
 6. Utiliza el programa para ver, modificar, eliminar y agregar artículos a diferentes depósitos
+7. Importar dll del proyecto CodigoComun que se encuentra en Class Library del repositorio de escritorio. 
