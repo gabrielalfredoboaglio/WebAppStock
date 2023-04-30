@@ -28,7 +28,7 @@ Para hacer funcionar el programa, es necesario conectarlo a una base de datos en
 
 1. Crea una base de datos en la nube. Puedes utilizar servicios de proveedores de nube como Microsoft Azure o Amazon Web Services para hacer esto.
 2. Obtén la cadena de conexión para tu base de datos.
-3. Abre el archivo "App.config" en el proyecto.
+3. Abre el archivo "Acceso a datos" en el proyecto.
 4. Actualiza la cadena de conexión con la información de tu base de datos en la nube.
 5. Una vez que hayas actualizado la cadena de conexión, podrás conectarte a tu base de datos en la nube.
 6. Utiliza el programa para ver, modificar, eliminar y agregar artículos a diferentes depósitos
