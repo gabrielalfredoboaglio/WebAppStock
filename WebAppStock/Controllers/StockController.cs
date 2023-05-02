@@ -85,12 +85,6 @@ namespace WebAppStock.Controllers
         }
 
 
-
-
-
-
-
-
         [HttpGet]
         public IActionResult Create()
         {
@@ -162,7 +156,6 @@ namespace WebAppStock.Controllers
         }
 
 
-
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -195,11 +188,6 @@ namespace WebAppStock.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-
-
-
 
 
         [HttpGet]
