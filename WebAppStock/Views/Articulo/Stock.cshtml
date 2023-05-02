@@ -1,0 +1,40 @@
+﻿@model WebAppStock.ViewModels.StockViewModels
+
+
+
+<h2>Lista de stocks Articulo</h2>
+<br />
+
+@if (Model != null && Model.StockDTOs.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Id Stock</th>
+                <th>Id Articulo</th>
+                <th>Id Deposito</th>
+                <th>Artículo</th>
+                <th>Depósito</th>
+                <th>Codigo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stockDTO in Model.StockDTOs)
+            {
+                <tr> <td>@stockDTO.Id</td>
+                     <td>@stockDTO.IdArticulo</td>
+                     <td>@stockDTO.IdDeposito</td>
+                    <td>@Model.ArticulosList.Where(a => a.Id == stockDTO.IdArticulo).FirstOrDefault()?.Nombre</td>
+                    <td>@Model.DepositosList.Where(d => d.Id == stockDTO.IdDeposito).FirstOrDefault()?.Nombre</td>
+                    <td>@Model.ArticulosList.FirstOrDefault(a => a.Id == stockDTO.IdArticulo)?.Codigo</td>
+
+                
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se encontraron stocks</p>
+}

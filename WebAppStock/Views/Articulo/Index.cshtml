@@ -33,7 +33,9 @@
                         <a asp-action="Edit" asp-route-articuloId="@articulo.Id" class="btn btn-info">Editar</a>
 
                         <a asp-action="Delete" asp-route-articuloId="@articulo.Id" class="btn btn-danger">Eliminar</a>
-
+                        
+                        
+                        <a asp-action="Stock" asp-route-idArticulo="@articulo.Id" class="btn btn-success">Stock</a>
                     </td>
                 </tr>
             }

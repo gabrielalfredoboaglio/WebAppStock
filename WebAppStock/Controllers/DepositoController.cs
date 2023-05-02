@@ -126,6 +126,8 @@ namespace WebAppStock.Controllers
 
             return View("Stock", stockViewModels);
         }
+
+
     }
 }
 

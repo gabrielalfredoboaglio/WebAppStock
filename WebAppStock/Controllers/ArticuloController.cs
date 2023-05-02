@@ -1,9 +1,11 @@
 ﻿using CodigoComun.Modelos;
 using CodigoComun.Modelos.DTO;
 using CodigoComun.Negocio;
+using CodigoComun.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using WebAppStock.ViewModels;
 
 namespace WebAppStock.Controllers
 {
@@ -100,6 +102,29 @@ namespace WebAppStock.Controllers
         }
 
 
+        public IActionResult Stock(int idArticulo)
+        {
+            StockRepository stockRepository = new StockRepository();
+            StockService stockService = new StockService(stockRepository);
+            var stocksDTO = stockService.ObtenerStockPorArticulo(idArticulo);
+
+
+            ArticuloService articuloService = new ArticuloService();
+            var articulosDTO = articuloService.ObtenerTodosLosArticulos();
+
+
+            DepositoService depositoService = new DepositoService();
+            var depositosDTO = depositoService.ObtenerTodosLosDepositos();
+
+            var stockViewModels = new StockViewModels
+            {
+                StockDTOs = stocksDTO,
+                ArticulosList = articulosDTO,
+                DepositosList = depositosDTO
+            };
+
+            return View("Stock", stockViewModels);
+        }
 
     }
 }
