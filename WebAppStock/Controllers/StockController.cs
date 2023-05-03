@@ -132,7 +132,6 @@ namespace WebAppStock.Controllers
                     articuloService.ActualizarArticulo(articulo); // Guardar el Articulo actualizado en la base de datos
                 }
 
-
             }
 
             if (stockViewModels.StockDTO.HuboError == false)
