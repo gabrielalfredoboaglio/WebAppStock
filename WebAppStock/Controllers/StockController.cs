@@ -56,7 +56,7 @@ namespace WebAppStock.Controllers
             foreach (var articulo in articulos)
             {
                 var articuloDTO = new ArticuloDTO
-                {   
+                {
                     Id = articulo.Id,
                     Nombre = articulo.Nombre,
                     Codigo = articulo.Codigo
@@ -220,6 +220,14 @@ namespace WebAppStock.Controllers
             stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
             stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
 
+            // Obtener los objetos ArticuloDTO y DepositoDTO del stockDTO
+            var articuloDTO = articuloService.GetArticuloPorId((int)stockDTO.IdArticulo);
+            var depositoDTO = depositoService.ObtenerDepositoPorId((int)stockDTO.IdDeposito);
+
+            // Asignar los objetos ArticuloDTO y DepositoDTO a la vista
+            ViewData["Articulo"] = articuloDTO;
+            ViewData["Deposito"] = depositoDTO;
+
             return View(stockViewModels);
         }
 
@@ -242,9 +250,10 @@ namespace WebAppStock.Controllers
             // Redirigir al Index de Stock
             return RedirectToAction("Index", "Stock");
         }
-    }
 
+    }
 }
+    
 
 
 
