@@ -126,8 +126,7 @@ namespace WebAppStock.Controllers
                 var articulo = articuloService.GetArticuloPorId((int)stockViewModels.StockDTO.IdArticulo);
                 if (articulo != null) // Verificar que el Articulo exista
                 {
-                    // Eliminar la siguiente línea que actualiza el mínimo stock del artículo
-                    // articulo.MinimoStock += stockViewModels.Cantidad; // Sumar la cantidad ingresada al mínimo stock
+                
 
                     articuloService.ActualizarArticulo(articulo); // Guardar el Articulo actualizado en la base de datos
                 }
