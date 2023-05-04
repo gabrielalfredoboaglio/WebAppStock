@@ -122,7 +122,7 @@ namespace WebAppStock.Controllers
                     stockViewModels.StockDTO.Cantidad = stockViewModels.Cantidad; // Asignar la cantidad ingresada
 
                     stockViewModels.StockDTO = stockService.AgregarStock(stockViewModels.StockDTO);
-
+                  
                     // Actualizar el mínimo stock del Articulo
                     var articuloService = new ArticuloService();
                     var articulo = articuloService.GetArticuloPorId((int)stockViewModels.StockDTO.IdArticulo);
@@ -134,6 +134,7 @@ namespace WebAppStock.Controllers
 
                 if (stockViewModels.StockDTO.HuboError == false)
                 {
+                   
                     // hacer algo si no hubo error
                     return RedirectToAction("Index", "Stock");
                 }
