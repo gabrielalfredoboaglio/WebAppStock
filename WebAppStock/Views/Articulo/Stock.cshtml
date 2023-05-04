@@ -28,9 +28,10 @@
                     <td>@Model.DepositosList.Where(d => d.Id == stockDTO.IdDeposito).FirstOrDefault()?.Nombre</td>
                     <td>@Model.ArticulosList.FirstOrDefault(a => a.Id == stockDTO.IdArticulo)?.Codigo</td>
 
-                
+               
                 </tr>
             }
+
         </tbody>
     </table>
 }

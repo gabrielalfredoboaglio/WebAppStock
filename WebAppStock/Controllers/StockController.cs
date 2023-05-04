@@ -107,49 +107,53 @@ namespace WebAppStock.Controllers
         [HttpPost]
         public IActionResult Create(StockViewModels stockViewModels)
         {
-            var stockRepository = new StockRepository();
-            var stockService = new StockService(stockRepository);
-
-            // Inicializar el objeto StockDTO
-            stockViewModels.StockDTO = new StockDTO();
-
-            if (stockViewModels.StockDTO != null)
+            try
             {
-                stockViewModels.StockDTO.IdArticulo = stockViewModels.SelectedArticulo;
-                stockViewModels.StockDTO.IdDeposito = stockViewModels.SelectedDeposito;
-                stockViewModels.StockDTO.Cantidad = stockViewModels.Cantidad; // Asignar la cantidad ingresada
+                var stockRepository = new StockRepository();
+                var stockService = new StockService(stockRepository);
 
-                stockViewModels.StockDTO = stockService.AgregarStock(stockViewModels.StockDTO);
+                // Inicializar el objeto StockDTO
+                stockViewModels.StockDTO = new StockDTO();
 
-                // Actualizar el mínimo stock del Articulo
-                var articuloService = new ArticuloService();
-                var articulo = articuloService.GetArticuloPorId((int)stockViewModels.StockDTO.IdArticulo);
-                if (articulo != null) // Verificar que el Articulo exista
+                if (stockViewModels.StockDTO != null)
                 {
-                
+                    stockViewModels.StockDTO.IdArticulo = stockViewModels.SelectedArticulo;
+                    stockViewModels.StockDTO.IdDeposito = stockViewModels.SelectedDeposito;
+                    stockViewModels.StockDTO.Cantidad = stockViewModels.Cantidad; // Asignar la cantidad ingresada
 
-                    articuloService.ActualizarArticulo(articulo); // Guardar el Articulo actualizado en la base de datos
+                    stockViewModels.StockDTO = stockService.AgregarStock(stockViewModels.StockDTO);
+
+                    // Actualizar el mínimo stock del Articulo
+                    var articuloService = new ArticuloService();
+                    var articulo = articuloService.GetArticuloPorId((int)stockViewModels.StockDTO.IdArticulo);
+                    if (articulo != null) // Verificar que el Articulo exista
+                    {
+                        articuloService.ActualizarArticulo(articulo); // Guardar el Articulo actualizado en la base de datos
+                    }
                 }
 
+                if (stockViewModels.StockDTO.HuboError == false)
+                {
+                    // hacer algo si no hubo error
+                    return RedirectToAction("Index", "Stock");
+                }
+                else
+                {
+                    // hacer algo si hubo error
+                    var articuloService = new ArticuloService();
+                    var depositoService = new DepositoService();
+                    var articulos = articuloService.ObtenerTodosLosArticulos();
+                    var depositos = depositoService.ObtenerTodosLosDepositos();
+
+                    stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
+                    stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
+
+                    return View(stockViewModels);
+                }
             }
-
-            if (stockViewModels.StockDTO.HuboError == false)
+            catch (Exception)
             {
-                // hacer algo si no hubo error
-                return RedirectToAction("Index", "Stock");
-            }
-            else
-            {
-                // hacer algo si hubo error
-                var articuloService = new ArticuloService();
-                var depositoService = new DepositoService();
-                var articulos = articuloService.ObtenerTodosLosArticulos();
-                var depositos = depositoService.ObtenerTodosLosDepositos();
-
-                stockViewModels.selectArticulosList = new SelectList(articulos, "Id", "Nombre");
-                stockViewModels.selectDepositosList = new SelectList(depositos, "Id", "Nombre");
-
-                return View(stockViewModels);
+                return BadRequest("Error! El stock de ese articulo y deposito ya existe");
             }
         }
 
